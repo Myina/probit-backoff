@@ -77,7 +77,7 @@ $$
 
 $$
 \Phi(z) = \int_{-\infty}^{z} \varphi(t)\,dt
-        = \frac{1}{2}\left[1 + \operatorname{erf}\left(\frac{z}{\sqrt{2}}\right)\right]
+= \frac{1}{2}\left[1 + \mathrm{erf}\left(\frac{z}{\sqrt{2}}\right)\right]
 $$
 
 The key identity is
