@@ -2,10 +2,11 @@
 
 ### A technical specification for attempt-indexed delay scheduling
 
+**Author:** Myina I S
+**Affiliation:** liuham dynamics Limited
 **Version:** 1.0  
 **Date:** 9 November 2026  
 **Companion implementation:** `GaussianBackoff.cs`, `RetrySimulation.cs`  
-**Affiliation:** liuham dynamics Limited
 
 ---
 
