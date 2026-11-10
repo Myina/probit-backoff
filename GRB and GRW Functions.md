@@ -259,14 +259,14 @@ With $m = 2.954$ the exact half-cap is 4.000. Rounding $m$ to 3 moves the exact 
 The nominal delay is a real number. The delivered delay is
 
 $$
-D_{\mathrm{int}}(k) = \operatorname{clamp}\left(\operatorname{round}(D(k)), D_0, D_{\mathrm{cap}}\right)
+D_{\mathrm{int}}(k) = \mathrm{clamp}\left(\mathrm{round}(D(k)), D_0, D_{\mathrm{cap}}\right)
 $$
 
 with `round` using a consistent convention (for example, half away from zero). Three details matter:
 
 - **Rounding can create plateaus.** Near the floor and cap, consecutive attempts may round to the same integer. This is acceptable for a non-decreasing schedule.
 - **Strict increase is a stronger requirement.** If every retry must be strictly longer than the previous one, enforce $D_{\mathrm{int}}(k) \ge  D_{\mathrm{int}}(k - 1) + 1$ until the cap is reached. Otherwise, document that plateaus are possible.
-- **Sub-millisecond delays need an explicit policy.** With $D_0 \ge  1$ the first retry is already at least one millisecond, so no special case arises. If $D_0 = 0$ is permitted, then for small $k$ the nominal delay can round to `0`. Decide between three policies: (a) forbid by requiring $D_0 \ge  1$; (b) allow `0` and treat it as "retry immediately"; (c) enforce a floor of `1` ms with $\max(1, \operatorname{round}(D(k)))$. Policy (c) changes $D(1)$ when $D_0 = 0$, so it must be documented as part of the schedule rather than applied silently in the transport layer. Negative values cannot occur after clamping, because $D_0 \ge  0$.
+- **Sub-millisecond delays need an explicit policy.** With $D_0 \ge  1$ the first retry is already at least one millisecond, so no special case arises. If $D_0 = 0$ is permitted, then for small $k$ the nominal delay can round to `0`. Decide between three policies: (a) forbid by requiring $D_0 \ge  1$; (b) allow `0` and treat it as "retry immediately"; (c) enforce a floor of `1` ms with $\max(1, \mathrm{round}(D(k)))$. Policy (c) changes $D(1)$ when $D_0 = 0$, so it must be documented as part of the schedule rather than applied silently in the transport layer. Negative values cannot occur after clamping, because $D_0 \ge  0$.
 
 ### 4.8 Jitter
 
@@ -276,8 +276,8 @@ Symmetric multiplicative jitter:
 
 $$
 \begin{aligned}
-D_j(k) &= \operatorname{clamp}\left(\operatorname{round}\left(D(k)\,(1 + j\,(2U-1))\right), D_0, D_{\mathrm{cap}}\right)\\
-U &\sim \operatorname{Uniform}[0,1)\\
+D_j(k) &= \mathrm{clamp}\left(\mathrm{round}\left(D(k)\,(1 + j\,(2U-1))\right), D_0, D_{\mathrm{cap}}\right)\\
+U &\sim \mathrm{Uniform}[0,1)\\
 j &\in [0,1)
 \end{aligned}
 $$
@@ -305,7 +305,7 @@ Two consequences matter operationally:
 Alternatives:
 
 - **Positive-only jitter:** $D_j(k) = D(k) \cdot  (1 + j \cdot  U)$, with $U \in  [0, 1)$. This avoids short delays but still does not guarantee monotonicity across attempts.
-- **Full jitter:** $D_j(k) \sim  \operatorname{Uniform}(D_0, D(k))$. More aggressive desynchronization, but can substantially shorten delays.
+- **Full jitter:** $D_j(k) \sim  \mathrm{Uniform}(D_0, D(k))$. More aggressive desynchronization, but can substantially shorten delays.
 - **Increment jitter:** jitter each increment rather than the level; this preserves monotonicity if the jittered increment is non-negative.
 
 Jitter necessarily weakens strict monotonicity; S4.9 separates the guarantees. If realized-delay monotonicity is a hard requirement, either disable jitter, use positive-only jitter with a monotone bound, or jitter the increments.
@@ -373,7 +373,7 @@ This is the same “quarter of the width” rule used for the backoff.
 Used alone, the window produces a hump:
 
 $$
-D_w(k) = \operatorname{clamp}\left(D_0 + W(k), D_0, D_{\mathrm{cap}}\right)
+D_w(k) = \mathrm{clamp}\left(D_0 + W(k), D_0, D_{\mathrm{cap}}\right)
 $$
 
 The delay rises to $D_0 + A_w$ at $k = \mu_w$ and then falls back toward $D_0$. This is appropriate only when a deliberate slow-down followed by a speed-up is desired. It is **not** a backoff in the monotone sense.
@@ -393,13 +393,13 @@ The window is usually more useful as a modifier on the monotone backoff.
 **Additive composition.**
 
 $$
-D(k) = \operatorname{clamp}\left(D_{\mathrm{backoff}}(k) + W(k), D_0, D_{\mathrm{cap}}\right)
+D(k) = \mathrm{clamp}\left(D_{\mathrm{backoff}}(k) + W(k), D_0, D_{\mathrm{cap}}\right)
 $$
 
 **Multiplicative composition.**
 
 $$
-D(k) = \operatorname{clamp}\left(D_{\mathrm{backoff}}(k)\,(1 + w\,G(k)), D_0, D_{\mathrm{cap}}\right)
+D(k) = \mathrm{clamp}\left(D_{\mathrm{backoff}}(k)\,(1 + w\,G(k)), D_0, D_{\mathrm{cap}}\right)
 $$
 
 $$
@@ -471,13 +471,13 @@ In practice, either keep the window wide and low, or use the capped increment-mu
 A complete schedule can be assembled as:
 
 $$
-D(k) = \operatorname{clamp}\left(D_{\mathrm{backoff}}(k) + W(k), D_0, D_{\mathrm{cap}}\right) \qquad \text{(additive)}
+D(k) = \mathrm{clamp}\left(D_{\mathrm{backoff}}(k) + W(k), D_0, D_{\mathrm{cap}}\right) \qquad \text{(additive)}
 $$
 
 or
 
 $$
-D(k) = \operatorname{clamp}\left(D_{\mathrm{backoff}}(k)\,(1 + w\,G(k)), D_0, D_{\mathrm{cap}}\right) \qquad \text{(multiplicative)}
+D(k) = \mathrm{clamp}\left(D_{\mathrm{backoff}}(k)\,(1 + w\,G(k)), D_0, D_{\mathrm{cap}}\right) \qquad \text{(multiplicative)}
 $$
 
 The additive form is easiest to reason about in milliseconds. The multiplicative form preserves the relative shape of the backoff. The **capped increment-multiplicative form (S5.4) is the canonical choice when composed nominal monotonicity is non-negotiable**; it is the only composition in this specification that is non-decreasing by construction.
@@ -1492,7 +1492,7 @@ The artifcates can be found with the paper.
 The reference implementation uses Abramowitz & Stegun 7.1.26:
 
 $$
-\operatorname{erf}(x) \approx 1 - \left(a_1 t + a_2 t^2 + a_3 t^3 + a_4 t^4 + a_5 t^5\right)e^{-x^2}
+\mathrm{erf}(x) \approx 1 - \left(a_1 t + a_2 t^2 + a_3 t^3 + a_4 t^4 + a_5 t^5\right)e^{-x^2}
 $$
 
 $$
@@ -1505,7 +1505,7 @@ a_5 &= 1.061405429
 \end{aligned}
 $$
 
-For $x < 0$, use $\operatorname{erf}(x) = -\operatorname{erf}(-x)$. Maximum absolute error is about $1.5 \times  10^{-7}$.
+For $x < 0$, use $\mathrm{erf}(x) = -\mathrm{erf}(-x)$. Maximum absolute error is about $1.5 \times  10^{-7}$.
 
 ### 15.2 Parameter quick reference
 
