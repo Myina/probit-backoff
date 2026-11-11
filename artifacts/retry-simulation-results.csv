@@ -1,0 +1,7 @@
+strategy,successRate,p50Ms,p95Ms,p99Ms,peakRetryArrivalsPer100ms,totalAttempts,meanAttempts,peakAtMs
+exponential,1.0000,7500,15500,15500,2000,10506,5.25,500
+exponential-full-jitter,0.9980,9716,21778,28893,597,12432,6.22,400
+exponential-equal-jitter,1.0000,10380,18806,24936,824,11197,5.60,300
+exponential-decorrelated-jitter,0.9875,7934,16658,20599,270,10037,5.02,1400
+probit,1.0000,10503,25410,25410,2000,8082,4.04,500
+probit-symmetric-jitter,1.0000,10652,25700,27744,1019,8090,4.04,400
