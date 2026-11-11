@@ -9,6 +9,7 @@
 **Date:** 9 November 2026  
 **Companion implementation:** `GaussianBackoff.cs`, `RetrySimulation.cs`  
 
+[![DOI](https://zenodo.org/badge/1453066250.svg)](https://doi.org/10.5281/zenodo.24131379)
 ---
 
 ## Abstract
