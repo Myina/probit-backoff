@@ -1,5 +1,7 @@
 # Gaussian Retry Backoff and Retry-Window Functions
 
+[![DOI](https://zenodo.org/badge/1453066250.svg)](https://doi.org/10.5281/zenodo.24131379)
+
 Gaussian Retry Backoff and Retry-Window Functions presents a mathematical and implementation specification for an alternative retry-scheduling approach. Its central contribution is a bounded, attempt-indexed delay curve derived from the Gaussian cumulative distribution function (CDF), alongside a separate Gaussian probability-density function (PDF) window for adding delay around selected retry attempts.
 
 A Gaussian PDF produces a hump-shaped curve that rises to a peak and then falls. Used directly as a backoff schedule, it can make later retries wait less than earlier ones. Instead, the paper uses the integral of the Gaussian density, represented by the normal CDF, as the delay function. This creates a smooth, non-decreasing curve that begins at a configured initial delay and approaches a configurable maximum. Parameters control the location and width of the transition. The paper derives the exact half-cap retry attempt.
